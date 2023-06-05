@@ -30,7 +30,7 @@ namespace Infrassur.Contralia.Api.Service
 		/// <param name="httpMethod">HTTP method to use</param>
 		/// <param name="formData">Call parameters as multipart form data</param>
 		/// <returns>HTTP request result as string</returns>
-		public static async Task<T> GetResponseAsType<T>(String apiPath, HttpMethod httpMethod, MultipartFormDataContent formData)
+		public static async Task<T> GetResponseAsType<T>(String apiPath, HttpMethod httpMethod, MultipartFormDataContent formData, string requestReference)
 		{
 			String uri = URL + apiPath;
 
@@ -42,9 +42,14 @@ namespace Infrassur.Contralia.Api.Service
 				// Set login and password
 				var credentials = Encoding.ASCII.GetBytes(LOGIN + ":" + PASSWORD);
 				client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(credentials));
-				//client.DefaultRequestHeaders.Clear();
+				// Ajouter la référence client en tant qu'en-tête
+				if (!string.IsNullOrEmpty(requestReference)) 
+				{
+					client.DefaultRequestHeaders.Add("requestReference", requestReference);
+				}
 
 				HttpResponseMessage response;
+
 				// Check HTTP method to use
 				if (httpMethod == HttpMethod.Post)
 				{
@@ -62,8 +67,9 @@ namespace Infrassur.Contralia.Api.Service
 					throw new Exception($"Error: {response.StatusCode} - {response.ReasonPhrase}\nError content: {errorContent}");
 				}
 				string htmlContent = await response.Content.ReadAsStringAsync();
-				string jsonContent = ExtractJsonFromHtml(htmlContent);
 
+				string jsonContent = ExtractJsonFromHtml(htmlContent);
+				
 				// Deserialize the extracted JSON content
 				result = JsonConvert.DeserializeObject<T>(jsonContent);
 				

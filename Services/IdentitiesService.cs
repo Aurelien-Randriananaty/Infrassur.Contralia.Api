@@ -1,7 +1,10 @@
-﻿using Infrassur.Contralia.Api.Contracts.Service;
+﻿using DataObjectsTransfert.IndentitiesDto;
+using Infrassur.Contralia.Api.Contracts.Service;
 using Infrassur.Contralia.Api.DataTransfertObjects.IndentitiesDto;
 using Infrassur.Contralia.Api.Models.Identities;
+using Microsoft.SqlServer.Server;
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -16,6 +19,7 @@ namespace Infrassur.Contralia.Api.Service
 		private static readonly String CORE_PREFIX = ConfigurationManager.AppSettings["CORE_PREFIX"];
 		private static readonly String EDOC_PREFIX = ConfigurationManager.AppSettings["EDOC_PREFIX"];
 
+		private String requestReference = string.Empty;
 		public async Task<IdentityResponse> CreateIdentitiesAsync(CreateIdentities createIdentities)
 		{
 			IdentityResponse result = new IdentityResponse();
@@ -54,37 +58,163 @@ namespace Infrassur.Contralia.Api.Service
 				{
 					formData.Add(new StringContent(createIdentities.PkiId), "pkId");
 				}
-				if (!String.IsNullOrEmpty(createIdentities.RequestReference))
-				{
-					formData.Add(new StringContent(createIdentities.RequestReference), "requestReference");
-				}
+				requestReference = !string.IsNullOrEmpty(createIdentities.RequestReference) ? createIdentities.RequestReference : "";
+
 
 				// Appeler l'API
 				String apiPath = String.Format(CORE_PREFIX + "/api/v2/identity");
-				result = await ServicesExtensions.GetResponseAsType<IdentityResponse>(apiPath, HttpMethod.Post, formData);
+				result = await ServicesExtensions.GetResponseAsType<IdentityResponse>(apiPath, HttpMethod.Post, formData, requestReference);
 			}
 
 			return result;
 		}
 
-		public async Task<FindIdentities> FindIdentitiesAsync(FindIdentities identity)
+		public async Task<IEnumerable<IdentitiesFindResponse>> FindIdentitiesAsync(FindIdentities findIdentities)
 		{
-			throw new NotImplementedException();
+			if(findIdentities == null)
+			{
+				return null;
+			}
+
+			List<IdentitiesFindResponse> result = null;
+
+			using (MultipartFormDataContent formData = new MultipartFormDataContent())
+			{
+				if (!string.IsNullOrEmpty(findIdentities.Description))
+				{
+					formData.Add(new StringContent(findIdentities.Description), "description");
+				}
+				if (!string.IsNullOrEmpty(findIdentities.Email))
+				{
+					formData.Add(new StringContent(findIdentities.Email), "email");
+				}
+				if (!string.IsNullOrEmpty(findIdentities.FirstName))
+				{
+					formData.Add(new StringContent(findIdentities.FirstName), "firstName");
+				}
+				if (!string.IsNullOrEmpty(findIdentities.LastName))
+				{
+					formData.Add(new StringContent(findIdentities.LastName), "lastName");
+				}
+
+				//requestReference = !string.IsNullOrEmpty(updateIdentity.RequestReference) ? "?requestReference=" + updateIdentity.RequestReference : "";
+				requestReference = !string.IsNullOrEmpty(findIdentities.RequestReference) ? findIdentities.RequestReference : "";
+
+				if (!string.IsNullOrEmpty(findIdentities.PkiId))
+				{
+					formData.Add(new StringContent(findIdentities.PkiId), "pkiId");
+				}
+
+				//string apiPath = string.Format(CORE_PREFIX + "/api/identity/{0}/update" + requestReference, id);
+				string apiPath = string.Format(CORE_PREFIX + "/api/identity/find");
+
+				result = await ServicesExtensions.GetResponseAsType<List<IdentitiesFindResponse>>(apiPath, HttpMethod.Get, formData, requestReference);
+			}
+
+			return result;				
+			
 		}
 
-		public async Task<RevokeIdentities> RevokeIdentitiesAsync(RevokeIdentities identity)
+		public async Task<IdentityStatusResponse> RevokeIdentitiesAsync(long id, RevokeIdentities revokeIdentities)
 		{
-			throw new NotImplementedException();
+			IdentityStatusResponse result = null;
+
+			if (string.IsNullOrEmpty(id.ToString()) || string.IsNullOrEmpty(revokeIdentities.Reason.ToString()))
+            {
+				return null;
+            }
+			using (MultipartFormDataContent formData = new MultipartFormDataContent())
+			{
+				
+				formData.Add(new StringContent(Enum.IsDefined(typeof(Reason), revokeIdentities.Reason).ToString()), "description");
+
+				if(!String.IsNullOrEmpty(revokeIdentities.ReasonDetails))
+				{
+					formData.Add(new StringContent(revokeIdentities.ReasonDetails), "rReasonDetails");
+				}				
+
+				//requestReference = !string.IsNullOrEmpty(updateIdentity.RequestReference) ? "?requestReference=" + updateIdentity.RequestReference : "";
+				requestReference = !string.IsNullOrEmpty(revokeIdentities.RequestReference) ? revokeIdentities.RequestReference : "";
+
+				
+				
+				//string apiPath = string.Format(CORE_PREFIX + "/api/identity/{0}/update" + requestReference, id);
+				string apiPath = string.Format(CORE_PREFIX + "/api/identity/{0}/revoke", id);
+				result = await ServicesExtensions.GetResponseAsType<IdentityStatusResponse>(apiPath, HttpMethod.Post, formData, requestReference);
+			}
+
+			return result;
 		}
 
-		public async Task<StatusIdentities> StatusIdentitiesAsync(StatusIdentities identity)
+		public async Task<IdentityStatusResponse> StatusIdentitiesAsync(long id, StatusIdentities statusIdentities)
 		{
-			throw new NotImplementedException();
+			IdentityStatusResponse result = null;
+			MultipartFormDataContent formData = null;
+			if (id == 0)
+			{
+				return null;
+			}
+			requestReference = !string.IsNullOrEmpty(statusIdentities.RequestReference) ? statusIdentities.RequestReference : "";
+
+			string apiPath = string.Format(CORE_PREFIX + "/api/identity/{0}/status", id);
+			result = await ServicesExtensions.GetResponseAsType<IdentityStatusResponse>(apiPath, HttpMethod.Get, formData, requestReference);
+
+			return result;
 		}
 
-		public async Task<UpdateIdentities> UpdateIdentitiesAsync(UpdateIdentities identity)
+		public async Task<IdentityResponse> UpdateIdentitiesAsync(long id, UpdateIdentities updateIdentity)
 		{
-			throw new NotImplementedException();
-		}
+			IdentityResponse result = new IdentityResponse();
+
+			if (string.IsNullOrEmpty(id.ToString()))
+			{			
+				return null;
+            }
+			using (MultipartFormDataContent formData = new MultipartFormDataContent()) 
+			{
+				if (!string.IsNullOrEmpty(updateIdentity.Description))
+				{
+					formData.Add(new StringContent(updateIdentity.Description), "description");
+				}
+				if (!string.IsNullOrEmpty(updateIdentity.Email))
+				{
+					formData.Add(new StringContent(updateIdentity.Email), "email");
+				}				
+				if (!string.IsNullOrEmpty(updateIdentity.FirstName))
+				{
+					formData.Add(new StringContent(updateIdentity.FirstName), "firstName");
+				}
+				if (!string.IsNullOrEmpty(updateIdentity.LastName))
+				{
+					formData.Add(new StringContent(updateIdentity.LastName), "lastName");
+				}
+
+				//requestReference = !string.IsNullOrEmpty(updateIdentity.RequestReference) ? "?requestReference=" + updateIdentity.RequestReference : "";
+				requestReference = !string.IsNullOrEmpty(updateIdentity.RequestReference) ? updateIdentity.RequestReference : "";
+
+				if (!string.IsNullOrEmpty(updateIdentity.PhoneNumber))
+				{
+					formData.Add(new StringContent(updateIdentity.PhoneNumber), "phoneNumber");
+				}
+				if (!String.IsNullOrEmpty(updateIdentity.DeclaredLevel.ToString()))
+				{
+					formData.Add(new StringContent(Enum.IsDefined(typeof(DeclaredLevel), updateIdentity.DeclaredLevel).ToString()), "declaresLevel");
+				}
+				if (!string.IsNullOrEmpty(updateIdentity.organizationCode))
+				{
+					formData.Add(new StringContent(updateIdentity.organizationCode), "organizationCode");
+				}
+				if (!string.IsNullOrEmpty(updateIdentity.PkiId))
+				{
+					formData.Add(new StringContent(updateIdentity.PkiId), "pkiId");
+				}
+				formData.Add(new StringContent(updateIdentity.ResetCounters.ToString()), "resetCounters");
+				//string apiPath = string.Format(CORE_PREFIX + "/api/identity/{0}/update" + requestReference, id);
+				string apiPath = string.Format(CORE_PREFIX + "/api/identity/{0}/update", id);
+				result = await ServicesExtensions.GetResponseAsType<IdentityResponse>(apiPath, HttpMethod.Post, formData, requestReference);
+			}
+
+			return result;
+        }
 	}
 }

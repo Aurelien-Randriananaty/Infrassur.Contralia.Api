@@ -6,9 +6,9 @@ namespace Infrassur.Contralia.Api.Models.Identities
 	public class UpdateIdentities
 	{
 		[XmlAttribute(AttributeName = "id")]
-		public long Id { get; set; }
+		public long? Id { get; set; }
 		[XmlAttribute(AttributeName = "declaredLevel")]
-		public DeclaredLevel DeclaredLevel { get; set; }
+		public DeclaredLevel? DeclaredLevel { get; set; }
 		[XmlAttribute(AttributeName = "description")]
 		public string Description { get; set; }
 		[XmlAttribute(AttributeName = "OrganizationCode")]

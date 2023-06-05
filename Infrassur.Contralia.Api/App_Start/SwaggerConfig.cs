@@ -1,5 +1,7 @@
-﻿using Swashbuckle.Application;
+﻿using Infrassur.Contralia.Api.DataTransfertObjects.IndentitiesDto;
+using Swashbuckle.Application;
 using System.Web.Http;
+using System.Xml.Serialization;
 
 namespace Infrassur.Contralia.Api.App_Start
 {

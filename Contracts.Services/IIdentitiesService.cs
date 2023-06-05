@@ -1,5 +1,7 @@
-﻿using Infrassur.Contralia.Api.DataTransfertObjects.IndentitiesDto;
+﻿using DataObjectsTransfert.IndentitiesDto;
+using Infrassur.Contralia.Api.DataTransfertObjects.IndentitiesDto;
 using Infrassur.Contralia.Api.Models.Identities;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Infrassur.Contralia.Api.Contracts.Service
@@ -7,9 +9,9 @@ namespace Infrassur.Contralia.Api.Contracts.Service
 	public interface IIdentitiesService
 	{
 		Task<IdentityResponse> CreateIdentitiesAsync(CreateIdentities createIdentities);
-		Task<FindIdentities> FindIdentitiesAsync(FindIdentities findIdentities);
-		Task<RevokeIdentities> RevokeIdentitiesAsync(RevokeIdentities revokeIdentities);
-		Task<StatusIdentities> StatusIdentitiesAsync(StatusIdentities statusIdentities);
-		Task<UpdateIdentities> UpdateIdentitiesAsync(UpdateIdentities updateIdentities);
+		Task<IEnumerable<IdentitiesFindResponse>> FindIdentitiesAsync(FindIdentities findIdentities);
+		Task<IdentityStatusResponse> RevokeIdentitiesAsync(long id, RevokeIdentities revokeIdentities);
+		Task<IdentityStatusResponse> StatusIdentitiesAsync(long id,StatusIdentities statusIdentities);
+		Task<IdentityResponse> UpdateIdentitiesAsync(long id, UpdateIdentities updateIdentities);
 	}
 }
