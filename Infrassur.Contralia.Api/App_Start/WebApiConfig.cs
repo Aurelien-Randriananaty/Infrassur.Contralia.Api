@@ -1,16 +1,12 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using Swashbuckle.Application;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Web.Http;
 
 namespace Infrassur.Contralia.Api
 {
-    public static class WebApiConfig
+	public static class WebApiConfig
     {
         public static void Register(HttpConfiguration config)
         {
@@ -29,14 +25,7 @@ namespace Infrassur.Contralia.Api
 
 			config.Formatters.Remove(config.Formatters.XmlFormatter);
 			config.Formatters.Add(new BrowserJsonFormatter());
-
-			config.Routes.MapHttpRoute(
-				name: "Swagger",
-				routeTemplate: "swagger/{*assetPath}",
-				defaults: null,
-				constraints: null,
-				handler: new RedirectHandler((message => message.RequestUri.GetLeftPart(UriPartial.Authority)), "swagger/ui/index")
-			);
+			
 		}
 	}
 	public class BrowserJsonFormatter : JsonMediaTypeFormatter

@@ -3,7 +3,6 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Http;
-using Infrassur.Contralia.Api.App_Start;
 using Infrassur.Contralia.Api.Controllers;
 using Newtonsoft.Json.Linq;
 using Ninject.Web.WebApi;
@@ -24,8 +23,6 @@ namespace Infrassur.Contralia.Api
 			GlobalConfiguration.Configure(WebApiConfig.Register);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             //RegisterDependencies(GlobalConfiguration.Configuration);
-
-            SwaggerConfig.Register();
 
 
         }
