@@ -6,15 +6,17 @@ namespace Infrassur.Contralia.Api.Models.Identities
 	[XmlRoot(ElementName = "revoke")]
 	public class RevokeIdentities
 	{
-		[XmlAttribute(AttributeName = "id")]
-		[Required]
-		public long Id { get; set; }
+		//[XmlAttribute(AttributeName = "id")]
+		//[Required(ErrorMessage = "id is required")]
+		//public long Id { get; set; }
 		[XmlAttribute(AttributeName = "reason")]
-		[Required]
+		[Required(ErrorMessage = "Reason is required")]
 		public Reason Reason { get; set; }
 		[XmlAttribute(AttributeName = "reasonDetails")]
+		[MaxLength(255, ErrorMessage = "Maximum length for the reasonDetails is 255 characters.")]
 		public string ReasonDetails { get; set; }
 		[XmlAttribute(AttributeName = "requestReference")]
+		[MaxLength(32, ErrorMessage = "Maximum length for the requestReference is 32 characters.")]
 		public string RequestReference { get; set; }
 	}
 

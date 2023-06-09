@@ -3,6 +3,7 @@ using Infrassur.Contralia.Api.Contracts.Service;
 using Infrassur.Contralia.Api.DataTransfertObjects.IndentitiesDto;
 using Infrassur.Contralia.Api.Models.Identities;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 
@@ -19,6 +20,10 @@ namespace Infrassur.Contralia.Api.Controllers
 		[Route("~/api/identities/create")]
 		public async Task<IHttpActionResult> CreateIndenity([FromBody] CreateIdentities createIdentities)
 		{
+			if (!ModelState.IsValid)
+			{
+				return BadRequest(ModelState);
+			}
 			var identity = await _service.IdentitiesService.CreateIdentitiesAsync(createIdentities);
 			return Ok(identity);
 		}
@@ -32,7 +37,7 @@ namespace Infrassur.Contralia.Api.Controllers
 			return Ok(identity);
 		}
 
-		// GET : Find Identities
+		// GET : Find Identity
 		[HttpGet]
 		[Route("~/api/identities/find")]
 		public async Task<IHttpActionResult> FindIdentities([FromBody] FindIdentities findIdentities)
@@ -41,9 +46,9 @@ namespace Infrassur.Contralia.Api.Controllers
 			return Ok(identities);
 		}
 
-		// GET : Find Identities
+		// GET : Find Identity
 		[HttpGet]
-		[Route("~/api/identities/{id:long}/find")]
+		[Route("~/api/identities/{id:long}/status")]
 		public async Task<IHttpActionResult> GetStatusIdentity(long id, [FromBody] StatusIdentities statusIdentities)
 		{
 			var statusIdentity = await _service.IdentitiesService.StatusIdentitiesAsync(id, statusIdentities);

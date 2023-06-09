@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using HtmlAgilityPack;
 using Newtonsoft.Json;
+using Entities.Exceptions;
 
 namespace Infrassur.Contralia.Api.Service
 {
@@ -37,44 +38,53 @@ namespace Infrassur.Contralia.Api.Service
 			HttpClientHandler handler = checkedProxy(PROXY_HOST, PROXY_PORT);
 
 			T result = default;
-			using (HttpClient client = new HttpClient(handler))
+			try
 			{
-				// Set login and password
-				var credentials = Encoding.ASCII.GetBytes(LOGIN + ":" + PASSWORD);
-				client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(credentials));
-				// Ajouter la référence client en tant qu'en-tête
-				if (!string.IsNullOrEmpty(requestReference)) 
+				using (HttpClient client = new HttpClient(handler))
 				{
-					client.DefaultRequestHeaders.Add("requestReference", requestReference);
+					// Set login and password
+					var credentials = Encoding.ASCII.GetBytes(LOGIN + ":" + PASSWORD);
+					client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(credentials));
+					// Ajouter la référence client en tant qu'en-tête
+					if (!string.IsNullOrEmpty(requestReference))
+					{
+						client.DefaultRequestHeaders.Add("requestReference", requestReference);
+					}
+
+					HttpResponseMessage response;
+
+					// Check HTTP method to use
+					if (httpMethod == HttpMethod.Post)
+					{
+						// Send POST request with parameters and retrieve result as string
+						response = await client.PostAsync(new Uri(uri), formData);
+					}
+					else
+					{
+						// Send GET request and retrieve result as string
+						response = await client.GetAsync(new Uri(uri));
+					}
+					if (!response.IsSuccessStatusCode)
+					{
+						string errorContent = await response.Content.ReadAsStringAsync();
+						throw new Exception($"Error: {response.StatusCode} - {response.ReasonPhrase}\nError content: {errorContent}");
+					}
+					string htmlContent = await response.Content.ReadAsStringAsync();
+
+					string jsonContent = ExtractJsonFromHtml(htmlContent);
+
+					// Deserialize the extracted JSON content
+					result = JsonConvert.DeserializeObject<T>(jsonContent);
+
 				}
 
-				HttpResponseMessage response;
-
-				// Check HTTP method to use
-				if (httpMethod == HttpMethod.Post)
-				{
-					// Send POST request with parameters and retrieve result as string
-					response = await client.PostAsync(new Uri(uri), formData);
-				}
-				else
-				{
-					// Send GET request and retrieve result as string
-					response = await client.GetAsync(new Uri(uri));
-				}
-				if (!response.IsSuccessStatusCode)
-				{
-					string errorContent = await response.Content.ReadAsStringAsync();
-					throw new Exception($"Error: {response.StatusCode} - {response.ReasonPhrase}\nError content: {errorContent}");
-				}
-				string htmlContent = await response.Content.ReadAsStringAsync();
-
-				string jsonContent = ExtractJsonFromHtml(htmlContent);
-				
-				// Deserialize the extracted JSON content
-				result = JsonConvert.DeserializeObject<T>(jsonContent);
-				
 			}
+			catch (Exception)
+			{
 
+				throw new CheckAppOfflineStatusException();
+			}
+			
 			return result;
 		}
 
