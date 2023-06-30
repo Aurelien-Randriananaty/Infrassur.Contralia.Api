@@ -9,18 +9,25 @@ using System.Web.Http;
 
 namespace Infrassur.Contralia.Api.Controllers
 {
+	/// <summary>
+	/// 
+	/// </summary>
 	public class IdentitiesController : ApiController
 	{
 		private readonly IServiceManager _service;
 
-        public IdentitiesController(IServiceManager service) => _service = service;
-
 		/// <summary>
-		/// Create a identity
+		/// 
 		/// </summary>
-		/// <param name="createIdentities">createIdentities is a Model to create an identity</param>
-		/// <returns></returns>
-		[HttpPost]
+		/// <param name="service"></param>
+        public IdentitiesController(IServiceManager service) => _service = service;
+        
+        /// <summary>
+        /// Create a identity
+        /// </summary>
+        /// <param name="createIdentities">createIdentities is a Model to create an identity</param>
+        /// <returns></returns>
+        [HttpPost]
 		[Route("~/api/identities/create")]
 		public async Task<IHttpActionResult> CreateIndenity([FromBody] CreateIdentities createIdentities)
 		{

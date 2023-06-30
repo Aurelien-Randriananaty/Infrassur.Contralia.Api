@@ -20,11 +20,10 @@ namespace Infrassur.Contralia.Api.Service
 		private static readonly String CORE_PREFIX = ConfigurationManager.AppSettings["CORE_PREFIX"];
 		private static readonly String EDOC_PREFIX = ConfigurationManager.AppSettings["EDOC_PREFIX"];
 		private String requestReference = string.Empty;
+        private IdentityResponse result;
 
-		public async Task<IdentityResponse> CreateIdentitiesAsync(CreateIdentities createIdentities)
+        public async Task<IdentityResponse> CreateIdentitiesAsync(CreateIdentities createIdentities)
 		{
-			IdentityResponse result = new IdentityResponse();
-
 			if (string.IsNullOrEmpty(createIdentities.Email) ||
 				string.IsNullOrEmpty(createIdentities.FirstName) ||
 				string.IsNullOrEmpty(createIdentities.LastName) ||
