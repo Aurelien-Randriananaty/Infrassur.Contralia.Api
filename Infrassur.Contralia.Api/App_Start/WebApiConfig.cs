@@ -1,16 +1,12 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using Swashbuckle.Application;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Web.Http;
 
 namespace Infrassur.Contralia.Api
 {
-    public static class WebApiConfig
+	public static class WebApiConfig
     {
         public static void Register(HttpConfiguration config)
         {
@@ -27,16 +23,9 @@ namespace Infrassur.Contralia.Api
 
 			// configure json formatter			
 
-			config.Formatters.Remove(config.Formatters.XmlFormatter);
+			config.Formatters.Add(config.Formatters.XmlFormatter);
 			config.Formatters.Add(new BrowserJsonFormatter());
-
-			config.Routes.MapHttpRoute(
-				name: "Swagger",
-				routeTemplate: "swagger/{*assetPath}",
-				defaults: null,
-				constraints: null,
-				handler: new RedirectHandler((message => message.RequestUri.GetLeftPart(UriPartial.Authority)), "swagger/ui/index")
-			);
+			
 		}
 	}
 	public class BrowserJsonFormatter : JsonMediaTypeFormatter
@@ -44,13 +33,15 @@ namespace Infrassur.Contralia.Api
 		public BrowserJsonFormatter()
 		{
 			this.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
-			this.SerializerSettings.Formatting = Formatting.Indented;
+			this.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/xml"));
+            this.SerializerSettings.Formatting = Formatting.Indented;
 		}
 
 		public override void SetDefaultContentHeaders(Type type, HttpContentHeaders headers, MediaTypeHeaderValue mediaType)
 		{
 			base.SetDefaultContentHeaders(type, headers, mediaType);
 			headers.ContentType = new MediaTypeHeaderValue("application/json");
-		}
+			//headers.ContentType = new MediaTypeHeaderValue("application/xml");
+        }
 	}
 }

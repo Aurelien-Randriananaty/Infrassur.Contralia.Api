@@ -42,12 +42,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exceptions\BadRequestException.cs" />
+    <Compile Include="Exceptions\CheckAppOfflineStatusException.cs" />
+    <Compile Include="Exceptions\IdParametersBadRequestException.cs" />
+    <Compile Include="Exceptions\NotFoundException.cs" />
+    <Compile Include="Exceptions\OrganizationCodeParameterBadRequest.cs" />
+    <Compile Include="Exceptions\XmlParametersBadREquestException.cs" />
     <Compile Include="Identities\CreateIdentities.cs" />
     <Compile Include="Identities\DeclaredLevel.cs" />
     <Compile Include="Identities\FindIdentities.cs" />
+    <Compile Include="Identities\Identity.cs" />
     <Compile Include="Identities\RevokeIdentities.cs" />
     <Compile Include="Identities\StatusIdentities.cs" />
     <Compile Include="Identities\UpdateIdentities.cs" />
+    <Compile Include="Organization\Organisation.cs" />
+    <Compile Include="Organization\OrganizationBase.cs" />
+    <Compile Include="Organization\OrganizationGet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

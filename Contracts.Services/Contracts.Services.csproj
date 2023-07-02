@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IIdentitiesService.cs" />
+    <Compile Include="IOrganizationService.cs" />
     <Compile Include="IServiceManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

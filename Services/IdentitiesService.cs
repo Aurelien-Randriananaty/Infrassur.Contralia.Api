@@ -1,8 +1,8 @@
 ﻿using DataObjectsTransfert.IndentitiesDto;
+using Entities.Exceptions;
 using Infrassur.Contralia.Api.Contracts.Service;
 using Infrassur.Contralia.Api.DataTransfertObjects.IndentitiesDto;
 using Infrassur.Contralia.Api.Models.Identities;
-using Microsoft.SqlServer.Server;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -11,19 +11,18 @@ using System.Threading.Tasks;
 
 namespace Infrassur.Contralia.Api.Service
 {
-	public class IdentitiesService : IIdentitiesService
+    public class IdentitiesService : IIdentitiesService
 	{
 		private static readonly String OFFER_CODE = ConfigurationManager.AppSettings["OFFER_CODE"];
 		private static readonly String ORGANIZATIONAL_UNIT_CODE = ConfigurationManager.AppSettings["ORGANIZATIONAL_UNIT_CODE"];
 
 		private static readonly String CORE_PREFIX = ConfigurationManager.AppSettings["CORE_PREFIX"];
 		private static readonly String EDOC_PREFIX = ConfigurationManager.AppSettings["EDOC_PREFIX"];
-
 		private String requestReference = string.Empty;
-		public async Task<IdentityResponse> CreateIdentitiesAsync(CreateIdentities createIdentities)
-		{
-			IdentityResponse result = new IdentityResponse();
+        private IdentityResponse result;
 
+        public async Task<IdentityResponse> CreateIdentitiesAsync(CreateIdentities createIdentities)
+		{
 			if (string.IsNullOrEmpty(createIdentities.Email) ||
 				string.IsNullOrEmpty(createIdentities.FirstName) ||
 				string.IsNullOrEmpty(createIdentities.LastName) ||
@@ -80,9 +79,9 @@ namespace Infrassur.Contralia.Api.Service
 
 			using (MultipartFormDataContent formData = new MultipartFormDataContent())
 			{
-				if (!string.IsNullOrEmpty(findIdentities.Description))
+				if (!string.IsNullOrEmpty(findIdentities.Id.ToString()))
 				{
-					formData.Add(new StringContent(findIdentities.Description), "description");
+					formData.Add(new StringContent(findIdentities.Id.ToString()), "id");
 				}
 				if (!string.IsNullOrEmpty(findIdentities.Email))
 				{
@@ -121,7 +120,7 @@ namespace Infrassur.Contralia.Api.Service
 
 			if (string.IsNullOrEmpty(id.ToString()) || string.IsNullOrEmpty(revokeIdentities.Reason.ToString()))
             {
-				return null;
+				throw new IdParametersBadRequestException();
             }
 			using (MultipartFormDataContent formData = new MultipartFormDataContent())
 			{
@@ -200,9 +199,9 @@ namespace Infrassur.Contralia.Api.Service
 				{
 					formData.Add(new StringContent(Enum.IsDefined(typeof(DeclaredLevel), updateIdentity.DeclaredLevel).ToString()), "declaresLevel");
 				}
-				if (!string.IsNullOrEmpty(updateIdentity.organizationCode))
+				if (!string.IsNullOrEmpty(updateIdentity.OrganizationCode))
 				{
-					formData.Add(new StringContent(updateIdentity.organizationCode), "organizationCode");
+					formData.Add(new StringContent(updateIdentity.OrganizationCode), "organizationCode");
 				}
 				if (!string.IsNullOrEmpty(updateIdentity.PkiId))
 				{

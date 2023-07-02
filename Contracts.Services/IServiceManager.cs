@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Contracts.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,5 +10,6 @@ namespace Infrassur.Contralia.Api.Contracts.Service
 	public interface IServiceManager
 	{
 		IIdentitiesService IdentitiesService { get; }
+		IOrganizationService OrganisationService { get; }
 	}
 }
