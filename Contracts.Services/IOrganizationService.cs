@@ -8,7 +8,7 @@ namespace Contracts.Services
     {
         Task<OrganizationSetDto> CreateOrganization(string requestReference, Organization organization);
         Task<OrganizationGetResponse> GetOrganizations(OrganizationGet organization);
-        Task<OrganizationList> GetOrganizationsList(string requestReference);
+        Task<OrganizationListResponse> GetOrganizationsList(string requestReference);
         Task<OrganizationConstraintsResponse> GetOrganizationConstraints(string requestReference);
     }
 }

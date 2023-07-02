@@ -3,7 +3,6 @@ using Entities.Exceptions;
 using Infrassur.Contralia.Api.Contracts.Service;
 using Infrassur.Contralia.Api.DataTransfertObjects.IndentitiesDto;
 using Infrassur.Contralia.Api.Models.Identities;
-using Microsoft.SqlServer.Server;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -12,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Infrassur.Contralia.Api.Service
 {
-	public class IdentitiesService : IIdentitiesService
+    public class IdentitiesService : IIdentitiesService
 	{
 		private static readonly String OFFER_CODE = ConfigurationManager.AppSettings["OFFER_CODE"];
 		private static readonly String ORGANIZATIONAL_UNIT_CODE = ConfigurationManager.AppSettings["ORGANIZATIONAL_UNIT_CODE"];

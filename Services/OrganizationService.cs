@@ -62,16 +62,16 @@ namespace Services
             return resultOrganisationCreated;
         }
 
-        public async Task<OrganizationList> GetOrganizationsList(string requestReference)
+        public async Task<OrganizationListResponse> GetOrganizationsList(string requestReference)
         {
-            OrganizationList organizationList = null;
+            OrganizationListResponse organizationList = null;
             using (MultipartFormDataContent formData = new MultipartFormDataContent())
             {
                 requestReference = requestReference ?? string.Empty;
 
                 // Appeler l'API
                 String apiPath = String.Format(CORE_PREFIX + "/api/v2/organizations/list");
-                organizationList = await ServicesExtensions.GetResponseAsType<OrganizationList>(apiPath, HttpMethod.Get, formData, requestReference);
+                organizationList = await ServicesExtensions.GetResponseAsType<OrganizationListResponse>(apiPath, HttpMethod.Get, formData, requestReference);
             }
 
             return organizationList;
@@ -107,7 +107,8 @@ namespace Services
 
                 // Appeler l'API
                 String apiPath = String.Format(CORE_PREFIX + "/api/v2/organizations/constraints");
-                organizationConstraints = await ServicesExtensions.GetResponseAsType<OrganizationConstraintsResponse>(apiPath, HttpMethod.Get, formData, requestReference);
+                organizationConstraints = (OrganizationConstraintsResponse) await ServicesExtensions.GetResponseAsType<OrganizationConstraintsResponse>(apiPath, HttpMethod.Get, formData, requestReference);
+                //organizationConstraints = (OrganizationConstraintsResponse)_organizationConstraints;
             }
 
             return organizationConstraints;

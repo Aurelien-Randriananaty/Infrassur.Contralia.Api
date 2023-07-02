@@ -1,11 +1,14 @@
-﻿using System.Xml.Serialization;
+﻿using System;
+using System.Runtime.CompilerServices;
+using System.Xml.Serialization;
 
 namespace DataObjectsTransfert.OrganizationDto
 {
-    [XmlRoot("organization")]
+    [Serializable]
+    [XmlRoot(ElementName ="organization")]
     public class OrganizationSetDto
     {
-        [XmlAttribute("code")]
+        [XmlAttribute(AttributeName = "code")]
         public string Code { get; set; }
     }
 }

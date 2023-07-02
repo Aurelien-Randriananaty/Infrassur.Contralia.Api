@@ -1,204 +1,233 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
+﻿using System;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 
 namespace DataObjectsTransfert.OrganizationDto
 {
-    [JsonObject("address")]
+    [XmlRoot(ElementName = "address")]
     public class Address
     {
-        [JsonProperty("street")]
+
+        [XmlElement(ElementName = "street")]
         public string Street { get; set; }
 
-        [JsonProperty("Complements")]
-        public object Complements { get; set; }
+        [XmlElement(ElementName = "complements")]
+        public string Complements { get; set; }
 
-        [JsonProperty("postalCode")]
+        [XmlElement(ElementName = "postalCode")]
         public int PostalCode { get; set; }
 
-        [JsonProperty("city")]
+        [XmlElement(ElementName = "city")]
         public string City { get; set; }
 
-        [JsonProperty("country")]
+        [XmlElement(ElementName = "country")]
         public string Country { get; set; }
     }
 
-    [JsonObject("signatureProfile")]
+    [XmlRoot(ElementName = "signatureProfile")]
     public class SignatureProfile
     {
-        [JsonProperty("description")]
+
+        [XmlElement(ElementName = "description")]
         public string Description { get; set; }
 
-        [JsonProperty("signatureText")]
+        [XmlElement(ElementName = "signatureText")]
         public string SignatureText { get; set; }
-        
-        [JsonProperty("reasonText")]
+
+        [XmlElement(ElementName = "reasonText")]
         public string ReasonText { get; set; }
-        
-        [JsonProperty("locationText")]
+
+        [XmlElement(ElementName = "locationText")]
         public string LocationText { get; set; }
 
-        [JsonProperty("number")]
+        [XmlAttribute(AttributeName = "number")]
         public int Number { get; set; }
 
-        [JsonProperty("enabled")]
+        [XmlAttribute(AttributeName = "enabled")]
         public bool Enabled { get; set; }
 
-        [JsonProperty("certificateProfile")]
+        [XmlAttribute(AttributeName = "certificateProfile")]
         public string CertificateProfile { get; set; }
     }
 
-    [JsonObject("signatorySignatureProfiles")]
+    [XmlRoot(ElementName = "signatorySignatureProfiles")]
     public class SignatorySignatureProfiles
     {
-        [JsonProperty("signatureProfile")]
+
+        [XmlElement(ElementName = "signatureProfile")]
         public List<SignatureProfile> SignatureProfile { get; set; }
     }
-    [JsonObject("organizationSignatureProfiles")]
+
+    [XmlRoot(ElementName = "organizationSignatureProfiles")]
     public class OrganizationSignatureProfiles
     {
-        [JsonProperty("signatureProfile")]
+
+        [XmlElement(ElementName = "signatureProfile")]
         public List<SignatureProfile> SignatureProfile { get; set; }
     }
-    [JsonObject("trustedCA")]
+
+    [XmlRoot(ElementName = "trustedCA")]
     public class TrustedCA
     {
-        [JsonProperty("certificate")]
+
+        [XmlElement(ElementName = "certificate")]
         public string Certificate { get; set; }
 
-        [JsonProperty("enabled")]
+        [XmlAttribute(AttributeName = "enabled")]
         public bool Enabled { get; set; }
     }
-    [JsonObject("trustedCAs")]
+
+    [XmlRoot(ElementName = "trustedCAs")]
     public class TrustedCAs
     {
-        [JsonProperty("trustedCA")]
+
+        [XmlElement(ElementName = "trustedCA")]
         public TrustedCA TrustedCA { get; set; }
 
-        [JsonProperty("trustAllCAs")]
+        [XmlAttribute(AttributeName = "trustAllCAs")]
         public bool TrustAllCAs { get; set; }
     }
-    [JsonObject("user")]
+
+    [XmlRoot(ElementName = "user")]
     public class User
     {
-        [JsonProperty("enabled")]
+
+        [XmlAttribute(AttributeName = "enabled")]
         public bool Enabled { get; set; }
 
-        [JsonProperty("name")]
+        [XmlAttribute(AttributeName = "name")]
         public string Name { get; set; }
 
-        [JsonProperty("username")]
+        [XmlAttribute(AttributeName = "username")]
         public string Username { get; set; }
 
-        [JsonProperty("email")]
+        [XmlAttribute(AttributeName = "email")]
         public string Email { get; set; }
 
-        [JsonProperty("role")]
+        [XmlAttribute(AttributeName = "role")]
         public string Role { get; set; }
 
-        [JsonProperty("description")]
-        public object Description { get; set; }
+        [XmlAttribute(AttributeName = "description")]
+        public string Description { get; set; }
     }
-    [JsonObject("users")]
+
+    [XmlRoot(ElementName = "users")]
     public class Users
     {
-        [JsonProperty("user")]
+
+        [XmlElement(ElementName = "user")]
         public List<User> User { get; set; }
     }
-    [JsonObject("parameter")]
+
+    [XmlRoot(ElementName = "parameter")]
     public class Parameter
     {
-        [JsonProperty("name")]
+
+        [XmlAttribute(AttributeName = "name")]
         public string Name { get; set; }
 
-        [JsonProperty("value")]
-        public int Value { get; set; }
+        [XmlAttribute(AttributeName = "value")]
+        public string Value { get; set; }
     }
-    [JsonObject("offer")]
+
+    [XmlRoot(ElementName = "offer")]
     public class Offer
     {
-        [JsonProperty("parameter")]
+
+        [XmlElement(ElementName = "parameter")]
         public List<Parameter> Parameter { get; set; }
 
-        [JsonProperty("name")]
+        [XmlAttribute(AttributeName = "name")]
         public string Name { get; set; }
 
-        [JsonProperty("code")]
+        [XmlAttribute(AttributeName = "code")]
         public string Code { get; set; }
 
-        [JsonProperty("product")]
+        [XmlAttribute(AttributeName = "product")]
         public string Product { get; set; }
     }
-    [JsonObject("offers")]
+
+    [XmlRoot(ElementName = "offers")]
     public class Offers
     {
-        [JsonProperty("offer")]
+
+        [XmlElement(ElementName = "offer")]
         public List<Offer> Offer { get; set; }
     }
-    [JsonObject("organizationalUnit")]
+
+    [XmlRoot(ElementName = "organizationalUnit")]
     public class OrganizationalUnit
     {
-        [JsonProperty("address")]
+
+        [XmlElement(ElementName = "address")]
         public Address Address { get; set; }
 
-        [JsonProperty("name")]
+        [XmlAttribute(AttributeName = "name")]
         public string Name { get; set; }
 
-        [JsonProperty("code")]
+        [XmlAttribute(AttributeName = "code")]
         public string Code { get; set; }
 
-        [JsonProperty("companyRegistrationNumber")]
+        [XmlAttribute(AttributeName = "companyRegistrationNumber")]
         public string CompanyRegistrationNumber { get; set; }
     }
-    [JsonObject("organizationalUnits")]
+
+    [XmlRoot(ElementName = "organizationalUnits")]
     public class OrganizationalUnits
     {
-        [JsonProperty("organizationalUnit")]
+
+        [XmlElement(ElementName = "organizationalUnit")]
         public List<OrganizationalUnit> OrganizationalUnit { get; set; }
     }
-    [JsonObject("organization")]
+
+    [Serializable]
+    [XmlRoot(ElementName = "organization", Namespace = "http://www.contralia.fr/organization")]
     public class OrganizationGetResponse
     {
-        [JsonProperty("adresse")]
+
+        [XmlElement(ElementName = "address")]
         public Address Address { get; set; }
 
-        [JsonProperty("signatorySignatureImage")]
+        [XmlElement(ElementName = "signatorySignatureImage")]
         public string SignatorySignatureImage { get; set; }
 
-        [JsonProperty("organizationSignatureImage")]
+        [XmlElement(ElementName = "organizationSignatureImage")]
         public string OrganizationSignatureImage { get; set; }
 
-        [JsonProperty("signatorySignatureProfiles")]
+        [XmlElement(ElementName = "signatorySignatureProfiles")]
         public SignatorySignatureProfiles SignatorySignatureProfiles { get; set; }
 
-        [JsonProperty("organizationSignatureProfiles")]
+        [XmlElement(ElementName = "organizationSignatureProfiles")]
         public OrganizationSignatureProfiles OrganizationSignatureProfiles { get; set; }
 
-        [JsonProperty("trustedCAs")]
+        [XmlElement(ElementName = "trustedCAs")]
         public TrustedCAs TrustedCAs { get; set; }
 
-        [JsonProperty("users")]
+        [XmlElement(ElementName = "users")]
         public Users Users { get; set; }
 
-        [JsonProperty("offers")]
+        [XmlElement(ElementName = "offers")]
         public Offers Offers { get; set; }
 
-        [JsonProperty("organizationalUnits")]
+        [XmlElement(ElementName = "organizationalUnits")]
         public OrganizationalUnits OrganizationalUnits { get; set; }
 
-        [JsonProperty("")]
+        [XmlAttribute(AttributeName = "code")]
         public string Code { get; set; }
 
-        [JsonProperty("name")]
+        //[XmlAttribute(AttributeName="xmlns")] 
+        //public string Xmlns { get; set; } 
+
+        [XmlAttribute(AttributeName = "name")]
         public string Name { get; set; }
-        
-        [JsonProperty("safe")]
+
+        [XmlAttribute(AttributeName = "safe")]
         public string Safe { get; set; }
-        
-        [JsonProperty("companyRegistrationNumber")]
+
+        [XmlAttribute(AttributeName = "companyRegistrationNumber")]
         public string CompanyRegistrationNumber { get; set; }
-        
-        [JsonProperty("companyRegistrationNumber2")]
-        public int CompanyRegistrationNumber2 { get; set; }        
+
+        [XmlAttribute(AttributeName = "companyRegistrationNumber2")]
+        public string CompanyRegistrationNumber2 { get; set; }
     }
 }

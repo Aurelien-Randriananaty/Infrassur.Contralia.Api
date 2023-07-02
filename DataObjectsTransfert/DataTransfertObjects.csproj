@@ -47,7 +47,7 @@
     <Compile Include="IndentitiesDto\IdentitiesFindResponse.cs" />
     <Compile Include="IndentitiesDto\IdentityResponse.cs" />
     <Compile Include="IndentitiesDto\IdentityStatusResponse.cs" />
-    <Compile Include="OrganizationDto\OrganisationListResponse.cs" />
+    <Compile Include="OrganizationDto\OrganizationListResponse.cs" />
     <Compile Include="OrganizationDto\OrganizationConstraintsResponse.cs" />
     <Compile Include="OrganizationDto\OrganizationGetResponse.cs" />
     <Compile Include="OrganizationDto\OrganizationSetDto.cs" />

@@ -1,8 +1,10 @@
-﻿using System.Xml.Serialization;
+﻿using System;
+using System.Xml.Serialization;
 
 namespace DataObjectsTransfert.OrganizationDto
 {
-    [XmlRoot("constraints")]
+    [Serializable]
+    [XmlRoot(ElementName ="constraints")]
     public class OrganizationConstraintsResponse
     {
         [XmlAttribute("prefix")]
@@ -12,6 +14,7 @@ namespace DataObjectsTransfert.OrganizationDto
         public Constraint[] ConstraintList { get; set; }
     }
 
+    [XmlRoot(ElementName = "constaint")]
     public class Constraint
     {
         [XmlAttribute("name")]

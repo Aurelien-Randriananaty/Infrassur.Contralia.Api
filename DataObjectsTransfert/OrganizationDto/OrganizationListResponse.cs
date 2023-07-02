@@ -1,19 +1,22 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 
 namespace DataObjectsTransfert.OrganizationDto
 {
-    //[JsonObject("organizations")]
-    public class OrganisationListResponse
+    [Serializable]
+    [XmlRoot(ElementName ="organizations")]
+    public class OrganizationListResponse
     {
-        //[JsonProperty("organization")]
+        [XmlElement(ElementName = "organization")]
         public List<OrganizationList> OrganizationList { get; set; }
     }
 
-    //[JsonObject("organization")]
+    [XmlRoot(ElementName ="organization")]
     public class OrganizationList
     {
-        //[JsonProperty("code")]
+        [XmlAttribute("code")]
         public string  Code { get; set; }
     }
 }

@@ -9,11 +9,16 @@ using System.Text;
 using System.Web;
 using System.Threading.Tasks;
 //using System.Net.Http.Formatting;
-using System.Xml;
+//using System.Xml;
 using HtmlAgilityPack;
 using Newtonsoft.Json;
 using Entities.Exceptions;
 using Entities.Organization;
+using Newtonsoft.Json.Linq;
+using DataObjectsTransfert.OrganizationDto;
+using System.Xml.Linq;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace Infrassur.Contralia.Api.Service
 {
@@ -32,20 +37,20 @@ namespace Infrassur.Contralia.Api.Service
         /// <param name="httpMethod">HTTP method to use</param>
         /// <param name="formData">Call parameters as multipart form data</param>
         /// <returns>HTTP request result as string</returns>
-        public static async Task<T> GetResponseAsType<T>(String apiPath, HttpMethod httpMethod, MultipartFormDataContent formData, string requestReference)
+        public static async Task<TEntity> GetResponseAsType<TEntity>(String apiPath, HttpMethod httpMethod, MultipartFormDataContent formData, string requestReference)
         {
             String uri = URL + apiPath;
 
             HttpClientHandler handler = checkedProxy(PROXY_HOST, PROXY_PORT);
 
-            T result = default;
-            //try
-            //{
+            TEntity result;
+
             using (HttpClient client = new HttpClient(handler))
             {
                 // Set login and password
                 var credentials = Encoding.ASCII.GetBytes(LOGIN + ":" + PASSWORD);
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(credentials));
+
                 // Ajouter la référence client en tant qu'en-tête
                 if (!string.IsNullOrEmpty(requestReference))
                 {
@@ -71,24 +76,13 @@ namespace Infrassur.Contralia.Api.Service
                     throw new Exception($"Error: {response.StatusCode} - {response.ReasonPhrase}\n Error content: {errorContent}");
                 }
                 string xmlContent = await response.Content.ReadAsStringAsync();
-                XmlDocument doc = new XmlDocument();
-                doc.LoadXml(xmlContent);
-                string jsonText = JsonConvert.SerializeXmlNode(doc);
 
-                //string jsonContent = ExtractJsonFromHtml(htmlContent);
+                
+                result = DeserializeXmlStringToObject<TEntity>(xmlContent);
+                //result = ParseTo<TEntity>(jsonText);
 
-                // Deserialize the extracted JSON content
-               T resultJSonDesirialize = JsonConvert.DeserializeObject<T>(jsonText);
-                result = resultJSonDesirialize;
-
+                
             }
-
-            //}
-            //catch (Exception)
-            //{
-
-            //	throw new CheckAppOfflineStatusException();
-            //}
 
             return result;
         }
@@ -151,6 +145,48 @@ namespace Infrassur.Contralia.Api.Service
             }
 
             return handler;
+        }
+
+        private static T DeserializeXmlStringToObject<T>(string xmlString)
+        {
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(T));
+
+            using (StringReader  sr = new StringReader(xmlString))
+            {
+                T member = (T)xmlSerializer.Deserialize(sr);
+                return member;
+            }
+        }
+        private static T ParseResonseXml<T>(Stream inputStream)
+        {
+            var serializer = new XmlSerializer(typeof(T));
+            return (T)serializer.Deserialize(inputStream);
+        }
+
+        private static string XDocumentToJson(string xmlContent)
+        {
+            var doc = XDocument.Parse(xmlContent);
+
+            string jsonText;
+
+            using (StringWriter stringWriter = new StringWriter())
+            {
+                using (XmlWriter xmlWriter = XmlWriter.Create(stringWriter, new XmlWriterSettings { OmitXmlDeclaration = true }))
+                {
+                    doc.WriteTo(xmlWriter);
+                    xmlWriter.Flush();
+
+                    jsonText = JsonConvert.SerializeXNode(XDocument.Parse(stringWriter.ToString()), Newtonsoft.Json.Formatting.None);
+                }
+            }
+
+            return jsonText;
+
+        }
+
+        private static T ParseTo<T>(string target)
+        {
+            return (T)System.Convert.ChangeType(target, typeof(T));
         }
 
         private static string ExtractJsonFromHtml(string htmlContent)
