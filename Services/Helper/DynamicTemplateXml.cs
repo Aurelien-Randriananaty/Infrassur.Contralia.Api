@@ -1,7 +1,5 @@
 ﻿using Entities.Organization;
 using Nustache.Core;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Services.Helper
 {

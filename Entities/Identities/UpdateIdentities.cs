@@ -1,10 +1,9 @@
 ﻿using Entities.Identities;
-using System.ComponentModel.DataAnnotations;
 using System.Xml.Serialization;
 
 namespace Infrassur.Contralia.Api.Models.Identities
 {
-	[XmlRoot(ElementName = "identity")]
+    [XmlRoot(ElementName = "identity")]
 	public class UpdateIdentities : Identity
 	{
 		//[XmlAttribute(AttributeName = "id")]

@@ -108,7 +108,6 @@ namespace Services
                 // Appeler l'API
                 String apiPath = String.Format(CORE_PREFIX + "/api/v2/organizations/constraints");
                 organizationConstraints = (OrganizationConstraintsResponse) await ServicesExtensions.GetResponseAsType<OrganizationConstraintsResponse>(apiPath, HttpMethod.Get, formData, requestReference);
-                //organizationConstraints = (OrganizationConstraintsResponse)_organizationConstraints;
             }
 
             return organizationConstraints;

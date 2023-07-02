@@ -1,23 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Net;
 using System.Text;
-using System.Web;
 using System.Threading.Tasks;
-//using System.Net.Http.Formatting;
-//using System.Xml;
-using HtmlAgilityPack;
-using Newtonsoft.Json;
-using Entities.Exceptions;
-using Entities.Organization;
-using Newtonsoft.Json.Linq;
-using DataObjectsTransfert.OrganizationDto;
-using System.Xml.Linq;
-using System.Xml;
 using System.Xml.Serialization;
 
 namespace Infrassur.Contralia.Api.Service
@@ -156,64 +143,7 @@ namespace Infrassur.Contralia.Api.Service
                 T member = (T)xmlSerializer.Deserialize(sr);
                 return member;
             }
-        }
-        private static T ParseResonseXml<T>(Stream inputStream)
-        {
-            var serializer = new XmlSerializer(typeof(T));
-            return (T)serializer.Deserialize(inputStream);
-        }
-
-        private static string XDocumentToJson(string xmlContent)
-        {
-            var doc = XDocument.Parse(xmlContent);
-
-            string jsonText;
-
-            using (StringWriter stringWriter = new StringWriter())
-            {
-                using (XmlWriter xmlWriter = XmlWriter.Create(stringWriter, new XmlWriterSettings { OmitXmlDeclaration = true }))
-                {
-                    doc.WriteTo(xmlWriter);
-                    xmlWriter.Flush();
-
-                    jsonText = JsonConvert.SerializeXNode(XDocument.Parse(stringWriter.ToString()), Newtonsoft.Json.Formatting.None);
-                }
-            }
-
-            return jsonText;
-
-        }
-
-        private static T ParseTo<T>(string target)
-        {
-            return (T)System.Convert.ChangeType(target, typeof(T));
-        }
-
-        private static string ExtractJsonFromHtml(string htmlContent)
-        {
-            HtmlDocument htmlDoc = new HtmlDocument();
-            htmlDoc.LoadHtml(htmlContent);
-
-            // Find the HTML element that contains the JSON content
-            // Adjust the XPath expression based on the structure of your HTML response
-            HtmlNode jsonNode = htmlDoc.DocumentNode.SelectSingleNode("//script[@type='application/json']");
-
-            if (jsonNode != null)
-            {
-                // Extract the JSON content from the HTML element
-                string jsonContent = jsonNode.InnerText;
-                return jsonContent;
-            }
-
-            // If the JSON content is not found, you can handle it accordingly (e.g., throw an exception, return null)
-            if (!string.IsNullOrWhiteSpace(htmlContent))
-            {
-                return null;
-            }
-            return htmlContent;
-        }
-
-
+        }    
     }
 
 }

@@ -1,18 +1,14 @@
-﻿using DataObjectsTransfert.IndentitiesDto;
-using Infrassur.Contralia.Api.Contracts.Service;
-using Infrassur.Contralia.Api.DataTransfertObjects.IndentitiesDto;
+﻿using Infrassur.Contralia.Api.Contracts.Service;
 using Infrassur.Contralia.Api.Models.Identities;
-using System.Collections.Generic;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace Infrassur.Contralia.Api.Controllers
 {
-	/// <summary>
-	/// 
-	/// </summary>
-	public class IdentitiesController : ApiController
+    /// <summary>
+    /// 
+    /// </summary>
+    public class IdentitiesController : ApiController
 	{
 		private readonly IServiceManager _service;
 

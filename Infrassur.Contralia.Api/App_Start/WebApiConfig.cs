@@ -23,7 +23,7 @@ namespace Infrassur.Contralia.Api
 
 			// configure json formatter			
 
-			config.Formatters.Add(config.Formatters.XmlFormatter);
+			config.Formatters.Remove(config.Formatters.XmlFormatter);
 			config.Formatters.Add(new BrowserJsonFormatter());
 			
 		}
@@ -41,7 +41,5 @@ namespace Infrassur.Contralia.Api
 		{
 			base.SetDefaultContentHeaders(type, headers, mediaType);
 			headers.ContentType = new MediaTypeHeaderValue("application/json");
-			//headers.ContentType = new MediaTypeHeaderValue("application/xml");
-        }
 	}
 }
