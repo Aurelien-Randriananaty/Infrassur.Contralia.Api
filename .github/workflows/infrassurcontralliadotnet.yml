@@ -1,0 +1,33 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: Infrasur.Contralia.Api CI&CD
+
+on:
+  push:
+    branches: [ "feature/*" ]
+  pull_request:
+    branches: [ "main", "staging" ]
+
+jobs:
+  build:
+
+    runs-on: windows-2019
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1
+      
+    - name: setup Nuget
+      uses: NuGet/setup-msbuild@v1.0.5
+      
+    - name: setup-msbuild
+      uses: microsoft/setup-msbuild@v1.1
+      
+    - name: Restor Packages    
+      run: nuget restore Infrassur.Contralia.Api.sln
+      
+    - name: Build solution
+      run: msbuild Infrassur.Contralia.Api.sln -t:rebuild -property:Configuration=Realease
